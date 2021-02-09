@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo 1</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0%;
+			padding: 0%;
+		}
+		.btn_group {
+			position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		}
+		.mu_btn {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			max-width: 32px;
+			cursor: pointer;
+			padding: 0px;
+		}
+		.mu_btn:after {
+		    content: "";
+		    width: 3px;
+		    height: 40px;
+		    background: beige;
+		    position: absolute;
+		    top: -5px;
+		    left: 14px;
+		    transform: rotate(45deg);
+		}
+		.mu_btn.active:after {
+			display: none;
+		}
+		.volume_section img { filter: invert(1); }
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<!-- video section -->
+		<div class="row">
+			<div class="ratio ratio-16x9">
+				<video id="vid" width="100%" style="object-fit: cover;" poster="../images/poster.jpg" preload="auto" autoplay muted>
+					<source src="../merge_video.mp4" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+			</div>
+		</div>
+
+		<!-- action button section -->
+		<div class="row btn_group">
+			<div class="btn_action">
+				<div class="btn_continue me-5">
+					<button class="btn btn-lg btn-primary">Continue</button>
+				</div>
+				<div class="btn_new_video ms-5">
+					<button class="btn btn-lg btn-primary">New Video</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- mute/unmute button -->
+		<div class="row volume_section">
+			<div class="mu_btn">
+				<img src="../images/volume.png" width="30" alt="volume icon" class="img-fluid" />
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// initially hide the action button
+		document.querySelector(".btn_action").style.display = "none";
+
+		// pause the video after few seconds
+		setTimeout(function() {
+			document.getElementById("vid").pause();
+
+			// while video pause show action button
+			document.querySelector(".btn_action").style.display = "flex";
+		},6000);
+
+		// action on click of contine button
+		document.querySelector(".btn_continue").addEventListener("click", function() {
+			setTimeout(function() {
+				document.getElementById("vid").play();
+				document.querySelector(".btn_action").style.display = "none";
+			},100);
+		});
+
+		// action on click of new video button
+		document.querySelector(".btn_new_video").addEventListener("click", function() {
+			setTimeout(function() {
+				document.getElementById("vid").currentTime = 27;
+				document.getElementById("vid").play();
+				document.querySelector(".btn_action").style.display = "none";
+			},100);
+		});
+
+		// action on click of volume button
+		jQuery(function($) {
+			$(".mu_btn").click(function() {
+				$(this).toggleClass("active");
+				if($(this).hasClass("active")) {
+					$("video").prop('muted',false);
+				}
+				else {
+					$("video").prop('muted',true);
+				}
+			});
+		});
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+<!-----
+Note: 
+=======
+Recently many browsers can only autoplay the videos with sound off, so you'll need to add "muted" attribute to the video tag too.
+
+Example:
+<video autoplay muted>
+...
+</video>
+
+
+Note:
+========
+If you want to play video from few seconds ahead instead of from initial seconds you have to use "currentTime" Property in js
+
+The currentTime property sets or returns the current position (in seconds) of the video playback.
+
+Example:
+document.getElementById("myVideo").currentTime = 5;
+
+Syntax:
+videoObject.currentTime = seconds
+
+
+Note:
+========
+How to mute and unmute video using jQuery
+$("video").prop('muted', true); //mute
+$("video").prop('muted', false); //unmute
